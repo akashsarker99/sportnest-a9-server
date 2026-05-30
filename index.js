@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+dotenv.config();
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors());
 app.use(express.json());
-dotenv.config();
-const port = process.env.PORT
+const port = process.env.PORT || 5000
 
 const uri = process.env.MONGODB_URI
 
@@ -28,6 +28,11 @@ const run = async () =>{
     app.get('/facility', async(req, res)=>{
        const result = await facilityCollection.find().toArray();
        res.send(result);
+    })
+    app.get('/facility/:id', async(req, res)=>{
+       const id = req.params.id;
+      const result = await facilityCollection.findOne({_id: new ObjectId(id)})
+      res.send(result)
     })
 
     await client.db("admin").command({ ping: 1 });
