@@ -34,6 +34,11 @@ const run = async () =>{
       const result = await facilityCollection.findOne({_id: new ObjectId(id)})
       res.send(result)
     })
+    app.post('/facility', async(req, res)=>{
+      const newData = req.body;
+      const result = await facilityCollection.insertOne(newData)
+      res.json(result);
+    })
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
