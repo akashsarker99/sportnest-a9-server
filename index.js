@@ -44,6 +44,14 @@ const run = async () =>{
       const result = await facilityCollection.find({owner_email: email}).toArray();
       res.json(result);
     })
+    app.patch('/facility/:id', async(req, res)=>{
+         const id = req.params.id;
+         const updatedFacility = req.body;
+         const result = await facilityCollection.updateOne(
+          {_id: new ObjectId(id)},
+          {$set: updatedFacility});
+          res.json(result);
+    })
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
