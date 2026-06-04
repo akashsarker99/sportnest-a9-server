@@ -24,6 +24,7 @@ const run = async () =>{
     await client.connect();
     const db = client.db('sportnestA9');
     const facilityCollection = db.collection('facilities');
+    const bookingCollection = db.collection('bookings');
     
     app.get('/facility', async(req, res)=>{
        const result = await facilityCollection.find().toArray();
@@ -51,6 +52,16 @@ const run = async () =>{
           {_id: new ObjectId(id)},
           {$set: updatedFacility});
           res.json(result);
+    })
+    app.delete('/facility/:id' , async(req, res)=>{
+      const id = req.params.id;
+      const result = await facilityCollection.deleteOne({_id: new ObjectId(id)})
+      res.json(result);
+    })
+    app.post('/booking', async(req, res)=>{
+      const bookingData = req.body;
+      const result = await bookingCollection.insertOne(bookingData);
+      res.json(result);
     })
 
     await client.db("admin").command({ ping: 1 });
